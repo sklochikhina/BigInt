@@ -19,7 +19,7 @@ private:
 public:
     BigInt();
     BigInt(long long number);
-    BigInt(const std::string);
+    BigInt(const std::string&);
     BigInt(const BigInt&);
     BigInt(BigInt&&) noexcept;
     ~BigInt();
