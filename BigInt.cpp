@@ -3,16 +3,14 @@
 #include <cstring>
 #include <string>
 
+const int MODULO = 1000000000;
+
 void do_swap(char* buff, int size) {
     for (int i = 0, j = size - 1; i < size / 2; ++i, --j)
         std::swap(buff[i], buff[j]);
 }
 
-BigInt::BigInt() { // a standard constructor
-    size = 0;
-    big_int = nullptr;
-    is_positive = true;
-}
+BigInt::BigInt() : size {0}, big_int {nullptr}, is_positive {true} {} // a standard constructor
 
 BigInt::BigInt(long long number) { // parsing the integer number into digits
 
@@ -47,13 +45,13 @@ BigInt::BigInt(long long number) { // parsing the integer number into digits
     }
 }
 
-BigInt::BigInt(const std::string str_number) { // parsing the string into digits
+BigInt::BigInt(const std::string& str_number) { // parsing the string into digits
 
     if (str_number.length() == 0) throw std::invalid_argument{ "Empty string" };
 
     size_t len = (str_number[0] != '-') ? str_number.length() : str_number.length() - 1;
 
-    size = (int)((len % 9 == 0) ? len / 9 : (len / 9) + 1);
+    size = static_cast<int>((len % 9 == 0) ? len / 9 : (len / 9) + 1);
     big_int = new int[size];
     is_positive = true;
 
@@ -70,7 +68,7 @@ BigInt::BigInt(const std::string str_number) { // parsing the string into digits
             throw std::invalid_argument{ "Invalid argument" };
 
         char* buff = new char[BUFFSIZE];
-        std::fill(buff, buff + BUFFSIZE, 0);
+        std::fill(buff, buff + BUFFSIZE, '\0');
 
         int index = 0, next = 0;
 
@@ -81,7 +79,7 @@ BigInt::BigInt(const std::string str_number) { // parsing the string into digits
                     index = 0;
                     do_swap(buff, BUFFSIZE);
                     big_int[next++] = strtol(buff, nullptr, 0);
-                    std::fill(buff, buff + BUFFSIZE, 0);
+                    std::fill(buff, buff + BUFFSIZE, '\0');
                 }
             }
             else
@@ -137,13 +135,9 @@ BigInt& BigInt::operator=(BigInt&& other) noexcept { // implementation of the as
     delete[] big_int;
 
     size = other.size;
-
-    big_int = new int[size];
-    memcpy(big_int, other.big_int, size * sizeof(int));
-
+    big_int = other.big_int;
     is_positive = other.is_positive;
 
-    delete[] other.big_int;
     other.big_int = nullptr;
 
     return *this;
@@ -183,7 +177,7 @@ BigInt& BigInt::operator+=(const BigInt& other) { // adding "other" to "this"
 
         int max = std::max(size, other.size);
         int* buff = new int[max + 1]; // additional array
-        std::fill(buff, buff + (max + 1), 0);
+        std::fill(buff, buff + (max + 1), '\0');
 
         int stop = (other.size > size) ? size : other.size;
         int i = 0;
@@ -268,7 +262,7 @@ BigInt& BigInt::operator-=(const BigInt& other) { // subtracting from "this" "ot
 
     int max = std::max(size, other.size);
     int* buff = new int[max]; // additional array
-    std::fill(buff, buff + max, 0);
+    std::fill(buff, buff + max, '\0');
 
     int stop = (other.size > size) ? size : other.size;
     int i = 0;
@@ -311,7 +305,7 @@ BigInt& BigInt::operator*=(const BigInt& other) {
     unsigned long long cur;
 
     int* buff = new int[(size * other.size) + 1]; // additional array
-    std::fill(buff, buff + ((size * other.size) + 1), 0);
+    std::fill(buff, buff + ((size * other.size) + 1), '\0');
 
     while (i < size) {
         int j = 0;
@@ -520,5 +514,5 @@ BigInt operator*(const BigInt& first, const BigInt& second) { // first * second
 //BigInt BigInt:: operator~() const {}
 
 std::ostream& operator<<(std::ostream& o, const BigInt& i) {
-    return o << i.operator std::string() << std::endl;
+    return o << i.operator std::string();
 }
