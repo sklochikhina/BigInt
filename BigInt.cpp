@@ -40,7 +40,7 @@ BigInt::BigInt(long long number) { // parsing the integer number into digits
     // initializing the "big_int"
     int next = 0;
     while (number) {
-        big_int[next++] = (int)(number % MODULO);
+        big_int[next++] = static_cast<int>(number % MODULO);
         number /= MODULO;
     }
 }
@@ -72,7 +72,7 @@ BigInt::BigInt(const std::string& str_number) { // parsing the string into digit
 
         int index = 0, next = 0;
 
-        for (auto i = (long long)(len - ((str_number[0] != '-') ? 1 : 0)); i >= stop; i--) {
+        for (auto i = static_cast<long long>(len - ((str_number[0] != '-') ? 1 : 0)); i >= stop; i--) {
             if (str_number[i] <= '9' && str_number[i] >= '0') {
                 buff[index++] = str_number[i];
                 if (index == BUFFSIZE) {
@@ -96,17 +96,17 @@ BigInt::BigInt(const std::string& str_number) { // parsing the string into digit
     }
 }
 
-BigInt::BigInt(const BigInt& other) { // copying the "other" number to the "this" number
-    is_positive = other.is_positive;
-    size = other.size;
-    big_int = new int[size];
+BigInt::BigInt(const BigInt& other) :
+    size {other.size},
+    big_int {new int[size]},
+    is_positive {other.is_positive} { // copying the "other" number to the "this" number
     memcpy(big_int, other.big_int, size * sizeof(int));
 }
 
-BigInt::BigInt(BigInt&& other) noexcept { // copying the "other" number to the "this" number and deleting "other"
-    is_positive = other.is_positive;
-    size = other.size;
-    big_int = other.big_int;
+BigInt::BigInt(BigInt&& other) noexcept :
+    size {other.size}, 
+    big_int {other.big_int},
+    is_positive {other.is_positive} { // copying the "other" number to the "this" number and deleting "other"
     other.big_int = nullptr;
 }
 
@@ -290,7 +290,7 @@ BigInt& BigInt::operator-=(const BigInt& other) { // subtracting from "this" "ot
 
     while (buff[i] == 0 && i > 0) i--;
 
-    size = (int)(i + 1);
+    size = static_cast<int>(i + 1);
 
     delete[] big_int;
     this->big_int = new int[size];
@@ -311,14 +311,14 @@ BigInt& BigInt::operator*=(const BigInt& other) {
         int j = 0;
         while (j < other.size || carry) {
             if (j < other.size)
-                cur = (unsigned long long)buff[i + j]
-                      + (unsigned long long)big_int[i] * (unsigned long long)other.big_int[j]
-                      + (unsigned long long)carry;
+                cur = static_cast<long long>(buff[i + j])
+                      + static_cast<long long>(big_int[i]) * static_cast<long long>(other.big_int[j])
+                      + static_cast<long long>(carry);
             else
-                cur = (unsigned long long)buff[i + j]
-                      + (unsigned long long)carry;
-            buff[i + j] = (int)(cur % MODULO);
-            carry = (int)(cur / MODULO);
+                cur = static_cast<long long>(buff[i + j])
+                      + static_cast<long long>(carry);
+            buff[i + j] = static_cast<int>(cur % MODULO);
+            carry = static_cast<int>(cur / MODULO);
             j++;
         }
         i++;
@@ -445,10 +445,10 @@ BigInt::operator std::string() const {
                 if (big_int[size - i - 1] < g) {
 
                     str_num = "000000000";
-                    int l = (int)str_num.length() - 1;
+                    int l = static_cast<int>(str_num.length()) - 1;
 
                     std::string help = std::to_string(big_int[size - i - 1]);
-                    int j = (int)help.length() - 1;
+                    int j = static_cast<int>(help.length()) - 1;
 
                     for (; j >= 0; j--, l--)
                         str_num[l] = help[j];
@@ -459,11 +459,11 @@ BigInt::operator std::string() const {
         else
             str_num = std::to_string(big_int[size - i - 1]);
 
-        int length = (int)str_num.length();
+        int length = static_cast<int>(str_num.length());
         for (int j = start, k = 0; j < length + start; j++, k++)
             buff[j] = str_num[k];
 
-        start += (int)str_num.length();
+        start += static_cast<int>(str_num.length());
     }
     if (!is_positive)
         buff.insert(0, "-");
