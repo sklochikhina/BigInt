@@ -1,7 +1,5 @@
 #include <iostream>
 
-const int MODULO = 1000000000;
-
 class BigInt {
     friend BigInt operator+(const BigInt&, const BigInt&);
     friend BigInt operator-(const BigInt&, const BigInt&);
