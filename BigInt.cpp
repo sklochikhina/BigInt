@@ -10,11 +10,12 @@ void do_swap(char* buff, int size) {
         std::swap(buff[i], buff[j]);
 }
 
-BigInt::BigInt() : size {0}, big_int {nullptr}, is_positive {true} {} // a standard constructor
+BigInt::BigInt() : size{ 0 }, big_int{ nullptr }, is_positive{ true } {} // a standard constructor
 
 BigInt::BigInt(long long number) { // parsing the integer number into digits
 
     long long tmp = number;
+
     size = (number == 0) ? 1 : 0;
 
     // initializing the "size"
@@ -57,56 +58,54 @@ BigInt::BigInt(const std::string& str_number) { // parsing the string into digit
 
     const int BUFFSIZE = 9;
 
-    if (len > 0) {
-        int stop = 0; // in case we have a negative number
+    int stop = 0; // in case we have a negative number
 
-        if (str_number[0] == '-') {
-            is_positive = false;
-            stop++;
-        }
-        else if (str_number[0] > '9' || str_number[0] < '0')
-            throw std::invalid_argument{ "Invalid argument" };
-
-        char* buff = new char[BUFFSIZE];
-        std::fill(buff, buff + BUFFSIZE, '\0');
-
-        int index = 0, next = 0;
-
-        for (auto i = static_cast<long long>(len - ((str_number[0] != '-') ? 1 : 0)); i >= stop; i--) {
-            if (str_number[i] <= '9' && str_number[i] >= '0') {
-                buff[index++] = str_number[i];
-                if (index == BUFFSIZE) {
-                    index = 0;
-                    do_swap(buff, BUFFSIZE);
-                    big_int[next++] = strtol(buff, nullptr, 0);
-                    std::fill(buff, buff + BUFFSIZE, '\0');
-                }
-            }
-            else
-                throw std::invalid_argument{ "Invalid argument" };
-        }
-
-        if (index) {
-            buff[index] = '\0';
-            do_swap(buff, index);
-            big_int[next] = strtol(buff, nullptr, 0);
-        }
-
-        delete[] buff;
+    if (str_number[0] == '-') {
+        is_positive = false;
+        stop++;
     }
+    else if (str_number[0] > '9' || str_number[0] < '0')
+        throw std::invalid_argument{ "Invalid argument" };
+
+    char* buff = new char[BUFFSIZE];
+    std::fill(buff, buff + BUFFSIZE, '\0');
+
+    int index = 0, next = 0;
+
+    for (auto i = static_cast<long long>(len - ((str_number[0] != '-') ? 1 : 0)); i >= stop; i--) {
+        if (str_number[i] <= '9' && str_number[i] >= '0') {
+            buff[index++] = str_number[i];
+            if (index == BUFFSIZE) {
+                index = 0;
+                do_swap(buff, BUFFSIZE);
+                big_int[next++] = strtol(buff, nullptr, 0);
+                std::fill(buff, buff + BUFFSIZE, '\0');
+            }
+        }
+        else
+            throw std::invalid_argument{ "Invalid argument" };
+    }
+
+    if (index) {
+        buff[index] = '\0';
+        do_swap(buff, index);
+        big_int[next] = strtol(buff, nullptr, 0);
+    }
+
+    delete[] buff;
 }
 
 BigInt::BigInt(const BigInt& other) :
-    size {other.size},
-    big_int {new int[size]},
-    is_positive {other.is_positive} { // copying the "other" number to the "this" number
+        size{ other.size },
+        big_int{ new int[size] },
+        is_positive{ other.is_positive } { // copying the "other" number to the "this" number
     memcpy(big_int, other.big_int, size * sizeof(int));
 }
 
 BigInt::BigInt(BigInt&& other) noexcept :
-    size {other.size}, 
-    big_int {other.big_int},
-    is_positive {other.is_positive} { // copying the "other" number to the "this" number and deleting "other"
+        size{ other.size },
+        big_int{ other.big_int },
+        is_positive{ other.is_positive } { // copying the "other" number to the "this" number and deleting "other"
     other.big_int = nullptr;
 }
 
