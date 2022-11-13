@@ -1,6 +1,7 @@
 #include "BigInt.h"
 #include "gtest/gtest.h"
 
+// constructors
 TEST(BigIntConstructorsTest, TestDefaultConstructor) {
 BigInt object;
 EXPECT_EQ(object.checkSize(), 0);
@@ -81,6 +82,7 @@ EXPECT_EQ(object2.checkBigInt(0), 888888888);
 EXPECT_EQ(object2.checkIsPositive(), true);
 }
 
+// assignment
 TEST(AssignmentOperatorsTest, TestPositiveNumAssignment) {
 BigInt object1(12345123456789);
 BigInt object2(0);
@@ -111,6 +113,7 @@ EXPECT_EQ(object2.checkBigInt(0), 888888888);
 EXPECT_EQ(object2.checkIsPositive(), true);
 }
 
+// increment
 TEST(RightIncrementTest, TestSimplePositiveNumIncrement) {
 BigInt object("1234567");
 object++;
@@ -177,6 +180,7 @@ EXPECT_EQ(object.checkBigInt(0), 999999999);
 EXPECT_EQ(object.checkIsPositive(), false);
 }
 
+// decrement
 TEST(RightDecrementTest, TestSimplePositiveNumDecrement) {
 BigInt object("1234567");
 object--;
@@ -210,7 +214,7 @@ EXPECT_EQ(object.checkBigInt(0), 0);
 EXPECT_EQ(object.checkIsPositive(), false);
 }
 
-// +=
+// operator +=
 TEST(NumbersSumOperatorTest, TestOneOfBigPositiveNum) {
 BigInt object1("999999999999999999");
 BigInt object2("999999999");
@@ -291,7 +295,7 @@ EXPECT_EQ(object1.checkBigInt(0), 0);
 EXPECT_EQ(object1.checkIsPositive(), true);
 }
 
-// -=
+// operator -=
 TEST(NumbersDifferenceOperatorTest, TestOneOfBigPositiveNum) {
 BigInt object1("999999999999999999");
 BigInt object2("999999999");
@@ -372,7 +376,11 @@ EXPECT_EQ(object1.checkBigInt(0), 0);
 EXPECT_EQ(object1.checkIsPositive(), true);
 }
 
-// *=
+TEST(NumbersDifferenceOperatorTest, SpecialTest) {
+    EXPECT_EQ((std::string)(BigInt {"10000000000000000000000000"} - BigInt {1}), "9999999999999999999999999");
+}
+
+// operator *=
 TEST(NumbersMultiplicationOperatorTest, TestOneOfBigPositiveNum) {
 BigInt object1("999999999");
 BigInt object2("2");
@@ -431,6 +439,7 @@ EXPECT_EQ(object1.checkBigInt(0), 0);
 EXPECT_EQ(object1.checkIsPositive(), true);
 }
 
+// comparison
 TEST(ComparisonOperatorsTest, EqualityOperatorTest) {
 BigInt object1("999999999999999999");
 BigInt object2("999999999999999999");
@@ -491,6 +500,7 @@ EXPECT_EQ(object1 >= object3, true);
 EXPECT_EQ(object1 >= object4, true);
 }
 
+// converting
 TEST(ConvertingBigIntToIntOperatorTest, BigIntConvertingTest) {
 BigInt object("999999999999999999");
 EXPECT_EQ((int)object, (int)999999999);
