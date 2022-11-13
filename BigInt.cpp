@@ -280,10 +280,9 @@ BigInt& BigInt::operator-=(const BigInt& other) { // subtracting from "this" "ot
         }
 
     while (i != max) {
-        long tmp = ((other.size > size) ? other.big_int[i] : big_int[i]) - carry;
-        buff[i] = tmp % MODULO;
-        carry = 0;
-        i++;
+        long tmp = MODULO  + ((other.size > size) ? other.big_int[i] : big_int[i]) - carry;
+        buff[i++] = tmp % MODULO;
+        carry = (tmp >= MODULO) ? 0 : 1;
     }
     i--;
 
