@@ -439,6 +439,10 @@ EXPECT_EQ(object1.checkBigInt(0), 0);
 EXPECT_EQ(object1.checkIsPositive(), true);
 }
 
+TEST(NumbersMultiplicationOperatorTest, ZeroArgumentTest) {
+    EXPECT_TRUE(BigInt(0) * BigInt(-1) == BigInt(0));
+}
+
 // comparison
 TEST(ComparisonOperatorsTest, EqualityOperatorTest) {
 BigInt object1("999999999999999999");
