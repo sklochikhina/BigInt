@@ -323,7 +323,8 @@ BigInt& BigInt::operator*=(const BigInt& other) {
     }
 
     if ((!is_positive && !other.is_positive)
-        || (other.size == 1 && other.big_int[0] == 0))
+        || (other.size == 1 && other.big_int[0] == 0)
+        || (size == 1 && big_int[0] == 0))
         is_positive = true;
     else if (is_positive && !other.is_positive)
         is_positive = false;
